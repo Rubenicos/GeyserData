@@ -2,6 +2,7 @@ package com.saicone.geyserdata;
 
 import com.saicone.geyserdata.connection.BungeeConnection;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.connection.Server;
 import net.md_5.bungee.api.event.PluginMessageEvent;
 import net.md_5.bungee.api.plugin.Listener;
 import net.md_5.bungee.api.plugin.Plugin;
@@ -36,11 +37,9 @@ public class GeyserDataBungee extends Plugin implements Listener {
         }
         event.setCancelled(true);
 
-        if (event.getSender() instanceof ProxiedPlayer) {
-            return;
+        if (event.getSender() instanceof Server && event.getReceiver() instanceof ProxiedPlayer) {
+            BungeeConnection connection = new BungeeConnection((Server) event.getSender(), (ProxiedPlayer) event.getReceiver(), event.getData());
+            getProxy().getScheduler().runAsync(this, connection::process);
         }
-
-        BungeeConnection connection = new BungeeConnection((ProxiedPlayer) event.getReceiver(), event.getData());
-        getProxy().getScheduler().runAsync(this, connection::process);
     }
 }

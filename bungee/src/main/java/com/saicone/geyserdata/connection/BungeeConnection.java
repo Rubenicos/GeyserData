@@ -3,6 +3,7 @@ package com.saicone.geyserdata.connection;
 import com.saicone.geyserdata.GeyserDataBungee;
 import net.md_5.bungee.api.config.ServerInfo;
 import net.md_5.bungee.api.connection.ProxiedPlayer;
+import net.md_5.bungee.api.connection.Server;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,8 +11,11 @@ import java.util.Map;
 
 public class BungeeConnection extends DownstreamConnection<ProxiedPlayer> {
 
-    public BungeeConnection(ProxiedPlayer player, byte[] data) {
+    private final Server server;
+
+    public BungeeConnection(Server server, ProxiedPlayer player, byte[] data) {
         super(player, data);
+        this.server = server;
     }
 
     @Override
@@ -44,6 +48,9 @@ public class BungeeConnection extends DownstreamConnection<ProxiedPlayer> {
 
     @Override
     protected void sendResponse(byte[] data) {
-        player.getServer().sendData(GeyserDataBungee.CHANNEL, data);
+        if (data.length < 1 || server == null) {
+            return;
+        }
+        server.sendData(GeyserDataBungee.CHANNEL, data);
     }
 }

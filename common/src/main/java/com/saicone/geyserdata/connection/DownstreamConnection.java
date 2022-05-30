@@ -49,6 +49,9 @@ public abstract class DownstreamConnection<T> {
     }
 
     protected void processPlatform() {
+        if (player == null) {
+            return;
+        }
         ByteArrayDataOutput out = ByteStreams.newDataOutput();
         out.writeUTF("Platform");
         out.writeUTF(isBedrockPlayer(getPlayerName()) ? "BEDROCK" : "JAVA");
