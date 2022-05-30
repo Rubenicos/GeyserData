@@ -1,0 +1,4 @@
+name: GeyserData
+main: com.saicone.geyserdata.GeyserDataBungee
+version: ${version}
+author: Rubenicos

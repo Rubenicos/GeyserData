@@ -1,0 +1,46 @@
+plugins {
+    id 'com.github.johnrengelman.shadow' version '7.1.2'
+}
+
+allprojects {
+    apply plugin: 'java'
+
+    repositories {
+        maven { url 'https://repo.opencollab.dev/maven-snapshots' }
+        mavenCentral()
+    }
+
+    dependencies {
+        compileOnly ('org.geysermc:core:2.0.3-SNAPSHOT') {
+            exclude group: 'com.nukkitx'
+            exclude group: 'com.nukkitx.fastutil'
+            exclude group: 'com.github.CloudburstMC.Protocol'
+            exclude group: 'com.github.GeyserMC', module: 'MCAuthLib'
+            exclude group: 'com.github.GeyserMC', module: 'MCProtocolLib'
+        }
+        compileOnly 'org.jetbrains:annotations:23.0.0'
+    }
+
+    compileJava {
+        options.encoding = 'UTF-8'
+    }
+
+    java {
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
+    }
+}
+
+dependencies {
+    implementation project(':bungee')
+    implementation project(':velocity')
+}
+
+jar {
+    enabled = false
+    dependsOn (shadowJar)
+}
+
+shadowJar {
+    archiveClassifier.set('')
+}
